@@ -24,7 +24,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "vortexgin\\yii2\\crud": "src/"
+      "vortexgin\\yii2\\crud\\": "src/"
     }
   }
 }
