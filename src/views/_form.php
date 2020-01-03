@@ -196,16 +196,22 @@ $singular = Inflector::singularize($reflector->getShortName());
                 </script>
                 <script src="https://maps.googleapis.com/maps/api/js?key=<?= Yii::$app->getModule('yii2-crud')->googleApiKey ?>&libraries=places&callback=initMap<?= $field['field'] ?>" async defer></script>
             <?php elseif($field['type'] == CRUD::FIELD_TYPE_DATE): ?>
+                <?php $model->setAttribute($field['field'], !empty($model->getAttribute($field['field'])) ? \DateTime::createFromFormat('Y-m-d H:i:s', $model->getAttribute($field['field']))->format('Y-m-d') : null) ?>
+
                 <?= $form->field($model, $field['field'])
                     ->input('date', !empty($field['options']) ? $field['options'] : [])
                     ->label(!empty($field['label']) ? $field['label'] : $defaultLabel)
                     ->hint(!empty($field['hint']) ? $field['hint'] : $defaultHint) ?>
             <?php elseif($field['type'] == CRUD::FIELD_TYPE_TIME): ?>
+                <?php $model->setAttribute($field['field'], !empty($model->getAttribute($field['field'])) ? \DateTime::createFromFormat('Y-m-d H:i:s', $model->getAttribute($field['field']))->format('H:i') : null) ?>
+
                 <?= $form->field($model, $field['field'])
                     ->input('time', !empty($field['options']) ? $field['options'] : [])
                     ->label(!empty($field['label']) ? $field['label'] : $defaultLabel)
                     ->hint(!empty($field['hint']) ? $field['hint'] : $defaultHint) ?>
             <?php elseif($field['type'] == CRUD::FIELD_TYPE_DATETIME): ?>
+                <?php $model->setAttribute($field['field'], !empty($model->getAttribute($field['field'])) ? \DateTime::createFromFormat('Y-m-d H:i:s', $model->getAttribute($field['field']))->format('Y-m-d\TH:i') : null) ?>
+
                 <?= $form->field($model, $field['field'])
                     ->input('datetime-local', !empty($field['options']) ? $field['options'] : [])
                     ->label(!empty($field['label']) ? $field['label'] : $defaultLabel)
