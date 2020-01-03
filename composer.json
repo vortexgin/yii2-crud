@@ -6,7 +6,7 @@
     "plugins",
     "crud"
   ],
-  "type": "composer-plugin",
+  "type": "yii2-plugin",
   "license": "GPL 2.0",
   "support": {
     "source": "https://github.com/vortexgin/yii2-crud"
