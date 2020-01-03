@@ -1,6 +1,6 @@
 <?php
 
-namespace vortexgin\yii2\crud;
+namespace vortexgin\yii2\crud\controllers;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -9,10 +9,10 @@ class CRUDController extends Controller
 {
 
     /** @var \yii\db\ActiveRecord $model */
-    private $model;
+    public static $model;
 
     /** @var \yii\db\ActiveRecord $modelSearch */
-    private $modelSearch;
+    public static $modelSearch;
 
     /**
      * Form fields
@@ -32,21 +32,26 @@ class CRUDController extends Controller
      *  ];
      * ```
      */
-    private $formField = [];
+    public static $formField = [];
 
     /**
      * Index fields. See GridView column for reference
      *
      * @var array $indexField
      */
-    private $indexField = [];
+    public static $indexField = [];
 
     /**
      * View fields. See DetailView attributes for reference
      *
      * @var array $viewField
      */
-    private $viewField = [];
+    public static $viewField = [];
+
+    /**
+     * [Optional] This flag used for set user access permission
+     */
+    public static $permissions = null;
 
     /**
      * Lists all row models.
@@ -54,12 +59,12 @@ class CRUDController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new $this->modelSearch;
+        $searchModel = new static::$modelSearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
 
         return $this->render('@yii2-crud/views/index', [
-            'model' => new $this->model,
-            'indexField' => $this->indexField,
+            'model' => new static::$model(),
+            'indexField' => static::$indexField,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -75,7 +80,7 @@ class CRUDController extends Controller
     {
         return $this->render('@yii2-crud/views/view', [
             'model' => $this->findModel($id),
-            'viewField' => $this->viewField,
+            'viewField' => static::$viewField,
         ]);
     }
 
@@ -86,7 +91,7 @@ class CRUDController extends Controller
      */
     public function actionCreate()
     {
-        $model = new $this->model;
+        $model = new static::$model(!empty(static::$permissions) ? ['permissions' => static::$permissions] : []);
 
         if ($model->load(\Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -94,7 +99,7 @@ class CRUDController extends Controller
 
         return $this->render('@yii2-crud/views/create', [
             'model' => $model,
-            'formField' => $this->formField,
+            'formField' => static::$formField,
         ]);
     }
 
@@ -115,7 +120,7 @@ class CRUDController extends Controller
 
         return $this->render('@yii2-crud/views/update', [
             'model' => $model,
-            'formField' => $this->formField,
+            'formField' => static::$formField,
         ]);
     }
 
@@ -142,7 +147,8 @@ class CRUDController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = $this->model::findOne($id)) !== null) {
+        $model = new static::$model();
+        if (($model = $model::findOne($id)) !== null) {
             return $model;
         }
 

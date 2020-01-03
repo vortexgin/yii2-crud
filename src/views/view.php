@@ -1,14 +1,20 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Inflector;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model yii\db\ActiveRecord */
 /* @var $viewField array */
 
+/** @var \ReflectionClass $reflector */
+$reflector = new \ReflectionClass($model);
+$plural = Inflector::pluralize($reflector->getShortName());
+$singular = Inflector::singularize($reflector->getShortName());
+
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', Inflector::humanize(get_class($model))), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', $plural), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>

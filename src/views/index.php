@@ -1,15 +1,22 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Inflector;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $model yii\db\ActiveRecord */
 /* @var $searchModel yii\db\ActiveRecord */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $indexField array */
 
-$this->title = Yii::t('app', Inflector::humanize(get_class($model)));
+/** @var \ReflectionClass $reflector */
+$reflector = new \ReflectionClass($model);
+$plural = Inflector::pluralize($reflector->getShortName());
+$singular = Inflector::singularize($reflector->getShortName());
+
+$this->title = Yii::t('app', $plural);
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="crud-index">
@@ -17,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create {model}', ['model' => Yii::t('app', Inflector::humanize(get_class($model)))]), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Create {model}', ['model' => Yii::t('app', $singular)]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>

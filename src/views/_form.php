@@ -11,6 +11,11 @@ use yii\bootstrap4\ActiveForm;
 ?>
 
 <div class="crud-form">
+    <?php if ($model->hasErrors()): ?>
+        <?php foreach ($model->getErrors() as $error): ?>
+            <div class="alert alert-danger"><?= implode(', ', $error) ?></div>
+        <?php endforeach; ?>
+    <?php endif; ?>
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -31,6 +36,7 @@ use yii\bootstrap4\ActiveForm;
         <?php foreach($formField as $field): ?>
             <?php $defaultLabel = !empty($labels[$field['field']]) ? $labels[$field['field']] : false ?>
             <?php $defaultHint = !empty($hints[$field['field']]) ? $hints[$field['field']] : false ?>
+            <?php $field['type'] = !empty($field['type']) ? $field['type'] : CRUD::FIELD_TYPE_TEXT ?>
 
             <?php if($field['type'] == CRUD::FIELD_TYPE_EMAIL): ?>
                 <?= $form->field($model, $field['field'])
@@ -77,7 +83,15 @@ use yii\bootstrap4\ActiveForm;
                         ->hint(!empty($field['hint']) ? $field['hint'] : $defaultHint) ?>
             <?php elseif($field['type'] == CRUD::FIELD_TYPE_RICHTEXT): ?>
                 <?= $form->field($model, $field['field'])
-                        ->textarea(array_merge(!empty($field['options']) ? $field['options'] : [], ['data-richtext' => true]))
+                        ->widget(\vova07\imperavi\Widget::className(), [
+                            'settings' => [
+                                'lang' => 'en',
+                                'minHeight' => 300,
+                                'buttons' => ['bold', 'italic', 'underline', 'unorderedlist', 'orderedlist', 'link'],
+                                'linebreaks' => true,
+                                'source' => false
+                            ],
+                        ])
                         ->label(!empty($field['label']) ? $field['label'] : $defaultLabel)
                         ->hint(!empty($field['hint']) ? $field['hint'] : $defaultHint) ?>
             <?php else: ?>

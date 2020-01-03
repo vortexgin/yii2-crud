@@ -7,8 +7,13 @@ use yii\helpers\Inflector;
 /* @var $model yii\db\ActiveRecord */
 /* @var $formField array */
 
-$this->title = Yii::t('app', 'Create {model}', ['model' => Yii::t('app', Inflector::humanize(get_class($model)))]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', Yii::t('app', Inflector::humanize(get_class($model)))), 'url' => ['index']];
+/** @var \ReflectionClass $reflector */
+$reflector = new \ReflectionClass($model);
+$plural = Inflector::pluralize($reflector->getShortName());
+$singular = Inflector::singularize($reflector->getShortName());
+
+$this->title = Yii::t('app', 'Create {model}', ['model' => Yii::t('app', $singular)]);
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', $plural), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="crud-create">
