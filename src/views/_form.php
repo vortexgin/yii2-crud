@@ -184,7 +184,7 @@ $singular = Inflector::singularize($reflector->getShortName());
                         });
                     }
                 </script>
-                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApRIf9vsp-JTVxtQFWJWmYi26FPp6Tu98&libraries=places&callback=initMap<?= $field['field'] ?>" async defer></script>
+                <script src="https://maps.googleapis.com/maps/api/js?key=<?= Yii::$app->getModule('yii2-crud')->googleApiKey ?>&libraries=places&callback=initMap<?= $field['field'] ?>" async defer></script>
             <?php else: ?>
                 <?= $form->field($model, $field['field'])
                         ->textInput(!empty($field['options']) ? $field['options'] : [])
