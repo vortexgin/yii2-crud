@@ -18,5 +18,6 @@ class CRUD extends Component
     const FIELD_TYPE_SELECT = 'select';
     const FIELD_TYPE_TEXTAREA = 'textarea';
     const FIELD_TYPE_RICHTEXT = 'richtext';
+    const FIELD_TYPE_MAPS = 'maps';
 
 }

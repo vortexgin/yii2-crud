@@ -1,13 +1,19 @@
 <?php
 
 use vortexgin\yii2\crud\models\CRUD;
-use yii\bootstrap4\Html;
 use yii\bootstrap4\ActiveForm;
+use yii\bootstrap4\Html;
+use yii\helpers\Inflector;
 
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $model yii\db\ActiveRecord */
 /* @var $formField array */
+
+/** @var \ReflectionClass $reflector */
+$reflector = new \ReflectionClass($model);
+$plural = Inflector::pluralize($reflector->getShortName());
+$singular = Inflector::singularize($reflector->getShortName());
 ?>
 
 <div class="crud-form">
@@ -17,7 +23,11 @@ use yii\bootstrap4\ActiveForm;
         <?php endforeach; ?>
     <?php endif; ?>
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'options' => [
+            'enctype' => 'multipart/form-data'
+        ]
+    ]); ?>
 
     <?php $labels = $model->attributeLabels() ?>
     <?php $hints = $model->attributeHints() ?>
@@ -94,6 +104,87 @@ use yii\bootstrap4\ActiveForm;
                         ])
                         ->label(!empty($field['label']) ? $field['label'] : $defaultLabel)
                         ->hint(!empty($field['hint']) ? $field['hint'] : $defaultHint) ?>
+            <?php elseif($field['type'] == CRUD::FIELD_TYPE_MAPS): ?>
+                <?= $form->field($model, $field['field'])
+                    ->textInput(!empty($field['options']) ? $field['options'] : [])
+                    ->label(!empty($field['label']) ? $field['label'] : $defaultLabel)
+                    ->hint(!empty($field['hint']) ? $field['hint'] : $defaultHint) ?>
+                <div id="map-<?= $field['field'] ?>" style="height: 300px; width: 100%;"></div>
+                <div class="form-group">
+                    <?= Html::textInput(sprintf('location-search-%s', $field['field']), '', [
+                        'id' => sprintf('location-search-%s', $field['field']),
+                        'class' => 'form-control',
+                        'placeholder' => Yii::t('app', 'Search location. Example: Monas, Balai Kartini')
+                    ]) ?>
+                </div>
+                <script>
+                    function initMap<?= $field['field'] ?>() {
+                        var defaultPosition = {lat: -6.21462, lng: 106.84513},
+                            zoom = 12;
+
+                        <?php if (!empty($position = $model->getAttribute($field['field']))): ?>
+                            <?php $exp = explode(',', $position) ?>
+                            defaultPosition = {lat: <?= $exp[0] ?>, lng: <?= $exp[1] ?>};
+                            zoom = 15;
+                        <?php endif; ?>
+
+
+                        var inputMap = document.getElementById('<?= sprintf('%s-%s', strtolower($reflector->getShortName()), $field['field']) ?>');
+                        inputMap.value = defaultPosition.lat + ',' + defaultPosition.lng;
+
+                        var map = new google.maps.Map(document.getElementById('map-<?= $field['field'] ?>'), {
+                            center: defaultPosition,
+                            zoom: zoom
+                        });
+
+                        var marker = new google.maps.Marker({
+                            position: defaultPosition,
+                            map: map
+                        });
+
+                        var searchInput = document.getElementById('<?= sprintf('location-search-%s', $field['field']) ?>');
+                        var searchBox = new google.maps.places.SearchBox(searchInput);
+                        map.controls[google.maps.ControlPosition.TOP_LEFT].push(searchInput);
+
+                        map.addListener('click', function(event) {
+                            marker.setMap(null);
+                            marker = new google.maps.Marker({
+                                position: {lat: event.latLng.lat(), lng: event.latLng.lng()},
+                                map: map
+                            })
+
+                            inputMap.value = event.latLng.lat() + ',' + event.latLng.lng();
+                        });
+
+                        searchBox.addListener('places_changed', function() {
+                            var places = searchBox.getPlaces();
+
+                            if (places.length == 0) {
+                                return;
+                            }
+
+                            var place = places[0];
+
+                            marker.setMap(null);
+                            marker = new google.maps.Marker({
+                                position: place.geometry.location,
+                                map: map
+                            })
+
+                            inputMap.value = place.geometry.location.lat() + ',' + place.geometry.location.lng();
+
+                            var bounds = new google.maps.LatLngBounds();
+                            if (place.geometry.viewport) {
+                                // Only geocodes have viewport.
+                                bounds.union(place.geometry.viewport);
+                            } else {
+                                bounds.extend(place.geometry.location);
+                            }
+                            map.fitBounds(bounds);
+                        });
+                    }
+                </script>
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApRIf9vsp-JTVxtQFWJWmYi26FPp6Tu98&libraries=places&callback=initMap<?= $field['field'] ?>" async defer></script>
             <?php else: ?>
                 <?= $form->field($model, $field['field'])
                         ->textInput(!empty($field['options']) ? $field['options'] : [])

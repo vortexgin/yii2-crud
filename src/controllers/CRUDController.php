@@ -15,40 +15,6 @@ class CRUDController extends Controller
     public static $modelSearch;
 
     /**
-     * Form fields
-     *
-     * @var array $formField
-     * @example
-     * ```
-     *  $formField = [
-     *      [
-     *          'field' => 'name',
-     *          'type' => 'text|email|password|number|hidden|file|checkbox|radio|select|textarea|richtext // Default: text
-     *          'label' => 'Name',
-     *          'hint' => 'Only accept number format',
-     *          'options' => [], // See HTML options,
-     *          'items' => [] // For options at select, radio & checkbox
-     *      ]
-     *  ];
-     * ```
-     */
-    public static $formField = [];
-
-    /**
-     * Index fields. See GridView column for reference
-     *
-     * @var array $indexField
-     */
-    public static $indexField = [];
-
-    /**
-     * View fields. See DetailView attributes for reference
-     *
-     * @var array $viewField
-     */
-    public static $viewField = [];
-
-    /**
      * [Optional] This flag used for set user access permission
      */
     public static $permissions = null;
@@ -64,7 +30,7 @@ class CRUDController extends Controller
 
         return $this->render('@yii2-crud/views/index', [
             'model' => new static::$model(),
-            'indexField' => static::$indexField,
+            'indexField' => $this->indexFields(),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -80,7 +46,7 @@ class CRUDController extends Controller
     {
         return $this->render('@yii2-crud/views/view', [
             'model' => $this->findModel($id),
-            'viewField' => static::$viewField,
+            'viewField' => $this->viewFields(),
         ]);
     }
 
@@ -99,7 +65,7 @@ class CRUDController extends Controller
 
         return $this->render('@yii2-crud/views/create', [
             'model' => $model,
-            'formField' => static::$formField,
+            'formField' => $this->formFields(),
         ]);
     }
 
@@ -120,7 +86,7 @@ class CRUDController extends Controller
 
         return $this->render('@yii2-crud/views/update', [
             'model' => $model,
-            'formField' => static::$formField,
+            'formField' => $this->formFields(),
         ]);
     }
 
@@ -154,4 +120,48 @@ class CRUDController extends Controller
 
         throw new NotFoundHttpException(\Yii::t('app', 'The requested page does not exist.'));
     }
+
+    /**
+     * Index fields. See GridView column for reference
+     *
+     * @return array
+     */
+    public function indexFields()
+    {
+        return [];
+    }
+
+    /**
+     * View fields. See DetailView attributes for reference
+     *
+     * @return array
+     */
+    public function viewFields()
+    {
+        return [];
+    }
+
+    /**
+     * Form fields. Override this function to generate form fields
+     *
+     * @example
+     * ```
+     *  $formField = [
+     *      [
+     *          'field' => 'name',
+     *          'type' => 'text|email|password|number|hidden|file|checkbox|radio|select|textarea|richtext|maps // Default: text
+     *          'label' => 'Name',
+     *          'hint' => 'Only accept number format',
+     *          'options' => [], // See HTML options,
+     *          'items' => [] // For options at select, radio & checkbox
+     *      ]
+     *  ];
+     * ```
+     * @return array
+     */
+    public function formFields()
+    {
+        return [];
+    }
+
 }
