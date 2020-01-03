@@ -1,0 +1,30 @@
+{
+  "name": "vortexgin/yii2-crud",
+  "description": "Base controller for CRUD on Yii2",
+  "keywords": [
+    "yii2",
+    "plugins",
+    "crud"
+  ],
+  "type": "composer-plugin",
+  "license": "GPL 2.0",
+  "support": {
+    "source": "https://github.com/vortexgin/yii2-crud"
+  },
+  "require": {
+    "php": ">=7.1",
+    "yiisoft/yii2": "~2.0.14",
+    "yiisoft/yii2-bootstrap4": "^1.0@dev"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "vortexgin\\yii2\\crud": "src/"
+    }
+  }
+}
