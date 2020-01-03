@@ -149,7 +149,7 @@ class CRUDController extends Controller
      *  $formField = [
      *      [
      *          'field' => 'name',
-     *          'type' => 'text|email|password|number|hidden|file|checkbox|radio|select|textarea|richtext|maps // Default: text
+     *          'type' => 'text|email|password|number|hidden|file|checkbox|radio|select|select2|textarea|richtext|maps // Default: text
      *          'label' => 'Name',
      *          'hint' => 'Only accept number format',
      *          'options' => [], // See HTML options,

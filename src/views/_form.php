@@ -86,6 +86,16 @@ $singular = Inflector::singularize($reflector->getShortName());
                         ->dropDownList(!empty($field['items']) ? $field['items'] : [], !empty($field['options']) ? $field['options'] : [])
                         ->label(!empty($field['label']) ? $field['label'] : $defaultLabel)
                         ->hint(!empty($field['hint']) ? $field['hint'] : $defaultHint) ?>
+            <?php elseif($field['type'] == CRUD::FIELD_TYPE_SELECT2): ?>
+                <?= $form->field($model, $field['field'])
+                        ->widget(\kartik\select2\Select2::classname(), [
+                            'data' => !empty($field['items']) ? $field['items'] : [],
+                            'language' => 'en',
+                            'options' => ['placeholder' => Yii::t('app', 'Select a {model} ...', ['model' => $reflector->getShortName()])],
+                            'pluginOptions' => !empty($field['options']) ? $field['options'] : [],
+                        ])
+                        ->label(!empty($field['label']) ? $field['label'] : $defaultLabel)
+                        ->hint(!empty($field['hint']) ? $field['hint'] : $defaultHint) ?>
             <?php elseif($field['type'] == CRUD::FIELD_TYPE_TEXTAREA): ?>
                 <?= $form->field($model, $field['field'])
                         ->textarea(!empty($field['options']) ? $field['options'] : [])
