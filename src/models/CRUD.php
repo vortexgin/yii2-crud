@@ -20,5 +20,8 @@ class CRUD extends Component
     const FIELD_TYPE_TEXTAREA = 'textarea';
     const FIELD_TYPE_RICHTEXT = 'richtext';
     const FIELD_TYPE_MAPS = 'maps';
+    const FIELD_TYPE_DATE = 'date';
+    const FIELD_TYPE_TIME = 'time';
+    const FIELD_TYPE_DATETIME = 'datetime';
 
 }

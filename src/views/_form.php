@@ -195,6 +195,21 @@ $singular = Inflector::singularize($reflector->getShortName());
                     }
                 </script>
                 <script src="https://maps.googleapis.com/maps/api/js?key=<?= Yii::$app->getModule('yii2-crud')->googleApiKey ?>&libraries=places&callback=initMap<?= $field['field'] ?>" async defer></script>
+            <?php elseif($field['type'] == CRUD::FIELD_TYPE_DATE): ?>
+                <?= $form->field($model, $field['field'])
+                    ->input('date', !empty($field['options']) ? $field['options'] : [])
+                    ->label(!empty($field['label']) ? $field['label'] : $defaultLabel)
+                    ->hint(!empty($field['hint']) ? $field['hint'] : $defaultHint) ?>
+            <?php elseif($field['type'] == CRUD::FIELD_TYPE_TIME): ?>
+                <?= $form->field($model, $field['field'])
+                    ->input('time', !empty($field['options']) ? $field['options'] : [])
+                    ->label(!empty($field['label']) ? $field['label'] : $defaultLabel)
+                    ->hint(!empty($field['hint']) ? $field['hint'] : $defaultHint) ?>
+            <?php elseif($field['type'] == CRUD::FIELD_TYPE_DATETIME): ?>
+                <?= $form->field($model, $field['field'])
+                    ->input('datetime-local', !empty($field['options']) ? $field['options'] : [])
+                    ->label(!empty($field['label']) ? $field['label'] : $defaultLabel)
+                    ->hint(!empty($field['hint']) ? $field['hint'] : $defaultHint) ?>
             <?php else: ?>
                 <?= $form->field($model, $field['field'])
                         ->textInput(!empty($field['options']) ? $field['options'] : [])

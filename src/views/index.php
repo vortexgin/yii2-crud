@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'columns' => array_merge([['class' => 'yii\grid\SerialColumn']], $indexField, [['class' => 'yii\grid\ActionColumn']]),
+        'columns' => array_merge([['class' => 'yii\grid\SerialColumn']], $indexField, [['class' => 'vortexgin\yii2\crud\components\grid\ActionColumn']]),
     ]); ?>
 
     <?php Pjax::end(); ?>
