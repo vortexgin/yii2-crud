@@ -13,8 +13,8 @@ use yii\widgets\Pjax;
 
 /** @var \ReflectionClass $reflector */
 $reflector = new \ReflectionClass($model);
-$plural = Inflector::pluralize($reflector->getShortName());
-$singular = Inflector::singularize($reflector->getShortName());
+$plural = Inflector::pluralize(Inflector::humanize(Inflector::underscore($reflector->getShortName()), true));
+$singular = Inflector::singularize(Inflector::humanize(Inflector::underscore($reflector->getShortName()), true));
 
 $this->title = Yii::t('app', $plural);
 $this->params['breadcrumbs'][] = $this->title;
@@ -29,11 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::begin(); ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => array_merge([['class' => 'yii\grid\SerialColumn']], $indexField, [['class' => 'vortexgin\yii2\crud\components\grid\ActionColumn']]),
-    ]); ?>
+    <div class="table-responsive">
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => array_merge([['class' => 'yii\grid\SerialColumn']], $indexField, [['class' => 'vortexgin\yii2\crud\components\grid\ActionColumn']]),
+        ]); ?>
+    </div>
 
     <?php Pjax::end(); ?>
 

@@ -9,8 +9,8 @@ use yii\helpers\Inflector;
 
 /** @var \ReflectionClass $reflector */
 $reflector = new \ReflectionClass($model);
-$plural = Inflector::pluralize($reflector->getShortName());
-$singular = Inflector::singularize($reflector->getShortName());
+$plural = Inflector::pluralize(Inflector::humanize(Inflector::underscore($reflector->getShortName()), true));
+$singular = Inflector::singularize(Inflector::humanize(Inflector::underscore($reflector->getShortName()), true));
 
 $this->title = Yii::t('app', 'Update {model}: {name}', [
     'model' => Yii::t('app', $singular),

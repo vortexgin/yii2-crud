@@ -7,6 +7,8 @@ class Module extends \yii\base\Module
 
     public $googleApiKey = null;
 
+    public $googleMapsEnable = false;
+
     /**
      * {@inheritdoc}
      */
